@@ -6,9 +6,12 @@ from tkinter import messagebox as msg
 arquivo = fd.askopenfilename(defaultextension=".txt")
 novo_sped = []
 pular_linha = False
+has_150 = False
+has_200 = False
 cont_registros = 0
 cont_registros_c = 0
 cont_registros_f = 0
+cont_registros_150 = 0
 
 system('cls')
 try:
@@ -17,9 +20,12 @@ try:
 
     for linha in ler:
         is_c170 = False
+        pular_linha = False
         
         # REGISTRO DE CLIENTES
-        # if linha.startswith("|0150|"):
+        if linha.startswith("|0150|"):
+            has_150 = True
+            cont_registros_150 += 1
         #     conteudo_linha = linha.split("|")
         #     insc_estadual = conteudo_linha[7].split()
         #     if len(insc_estadual) != 13:
@@ -75,6 +81,11 @@ try:
             nova_linha = linha.replace(linha, f'|F990|{cont_registros_f+1}|\n')
             novo_sped.append(nova_linha)
             pular_linha = True      
+            
+        if linha.startswith("|9900|0140|1|") and has_150:
+            novo_sped.append(linha)
+            novo_sped.append(f"|9900|0150|{cont_registros_150+1}|\n")
+            pular_linha = True
             
         if linha.startswith("|9999|"):
             nova_linha = linha.replace(linha, f'|9999|{cont_registros+2}|\n')
