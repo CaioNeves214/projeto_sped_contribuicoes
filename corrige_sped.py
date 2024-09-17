@@ -12,7 +12,6 @@ cont_registros = 0
 cont_registros_c = 0
 cont_registros_f = 0
 cont_registros_150 = 0
-teste = 1
 
 system('cls')
 try:
