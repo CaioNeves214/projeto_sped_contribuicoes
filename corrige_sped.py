@@ -9,9 +9,11 @@ pular_linha = False
 has_150 = False
 has_200 = False
 cont_registros = 0
+cont_registros_0 = 0
+cont_registros_150 = 0
 cont_registros_c = 0
 cont_registros_f = 0
-cont_registros_150 = 0
+cont_registros_1000 = 0
 
 system('cls')
 try:
@@ -26,6 +28,7 @@ try:
         if linha.startswith("|0150|"):
             has_150 = True
             cont_registros_150 += 1
+            # cont_registros_0 = cont_registros_0+1
         #     conteudo_linha = linha.split("|")
         #     insc_estadual = conteudo_linha[7].split()
         #     if len(insc_estadual) != 13:
@@ -34,6 +37,11 @@ try:
         #         novo_sped.append(nova_linha)
         #         cont_registros_c = cont_registros_c+1
         #         pular_linha = True
+        
+        if linha.startswith("|0990|"):
+            pular_linha = True
+            nova_linha = linha.replace(linha, f'|0990|{cont_registros_0+1}|\n')
+            novo_sped.append(nova_linha)
                 
         if linha.startswith("|C100|0|"):
             pular_linha = True
@@ -54,9 +62,9 @@ try:
                 cont_registros = cont_registros+1
         
         if linha.startswith("|C990|"):
+            pular_linha = True
             nova_linha = linha.replace(linha, f'|C990|{cont_registros_c+1}|\n')
             novo_sped.append(nova_linha)
-            pular_linha = True
             
         if linha.startswith("|D"):
             pular_linha = False
@@ -65,22 +73,38 @@ try:
         if linha.startswith("|F001|"):
             cont_registros_f = cont_registros_f+1
             conteudo_linha = linha.split("|")
-            if conteudo_linha[2] == '0':
-                conteudo_linha[2] = '1'
+            if conteudo_linha[2] == '1':
+                conteudo_linha[2] = '0'
                 nova_linha = '|'.join(conteudo_linha)
                 novo_sped.append(nova_linha)
                 pular_linha = True
         
         if linha.startswith("|F100|"):
-            cont_registros_f = cont_registros_f+1
+            # cont_registros_f = cont_registros_f+1
+            print("pendente")
         
         if linha.startswith("|F130|"):
-            cont_registros_f = cont_registros_f+1
+            # cont_registros_f = cont_registros_f+1
+            print("pendente")
             
         if linha.startswith("|F990|"):
             nova_linha = linha.replace(linha, f'|F990|{cont_registros_f+1}|\n')
             novo_sped.append(nova_linha)
             pular_linha = True      
+            
+        if linha.startswith("|1001|"):
+            cont_registros_1000 = cont_registros_1000+1
+            conteudo_linha = linha.split("|")
+            if conteudo_linha[2] == '1':
+                conteudo_linha[2] = '0'
+                nova_linha = '|'.join(conteudo_linha)
+                novo_sped.append(nova_linha)
+                pular_linha = True
+        
+        if linha.startswith("|1990|"):
+            nova_linha = linha.replace(linha, f'|1990|{cont_registros_1000+1}|\n')
+            novo_sped.append(nova_linha)
+            pular_linha = True
             
         if linha.startswith("|9900|0140|1|") and has_150:
             novo_sped.append(linha)
@@ -99,6 +123,10 @@ try:
                 cont_registros_c = cont_registros_c+1
             if linha.startswith("|F"):
                 cont_registros_f = cont_registros_f+1
+            if linha.startswith("|0"):
+                cont_registros_0 = cont_registros_0+1
+            if linha.startswith("|1"):
+                cont_registros_1000 = cont_registros_1000+1
                 
 
     files = [('Escrituração Fiscal', '*.txt')]
