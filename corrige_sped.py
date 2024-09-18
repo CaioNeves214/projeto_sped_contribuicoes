@@ -1,6 +1,7 @@
 from tkinter import filedialog as fd
 from tkinter import messagebox as msg
 
+
 arquivo = fd.askopenfilename(defaultextension=".txt")
 novo_sped = []
 pular_linha = False
