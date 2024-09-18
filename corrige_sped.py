@@ -1,5 +1,3 @@
-from os import system
-from time import sleep
 from tkinter import filedialog as fd
 from tkinter import messagebox as msg
 
@@ -22,7 +20,7 @@ cont_registros_f100 = 0
 cont_registros_f130 = 0
 cont_registros_totalizadores = 0
 
-system('cls')
+
 try:
     with open(arquivo, 'r', encoding='ASCII', errors='ignore') as sped:
         ler = sped.readlines()
@@ -34,15 +32,15 @@ try:
         # REGISTRO DE CLIENTES
         if linha.startswith("|0150|"):
             cont_registros_150 += 1
-            # cont_registros_0 = cont_registros_0+1
-        #     conteudo_linha = linha.split("|")
-        #     insc_estadual = conteudo_linha[7].split()
-        #     if len(insc_estadual) != 13:
-        #         conteudo_linha[7] = ''
-        #         nova_linha = '|'.join(conteudo_linha)
-        #         novo_sped.append(nova_linha)
-        #         cont_registros_c = cont_registros_c+1
-        #         pular_linha = True
+            cont_registros_0 = cont_registros_0+1
+            conteudo_linha = linha.split("|")
+            insc_estadual = conteudo_linha[7].split()
+            nova_insc_estadual = [i.replace('-','').replace('.','') for i in insc_estadual]
+            conteudo_linha[7] = ''.join(nova_insc_estadual)        
+            nova_linha = '|'.join(conteudo_linha)
+            novo_sped.append(nova_linha)
+            cont_registros += 1
+            pular_linha = True
         
         if linha.startswith("|0190|"):
             cont_registros_190 += 1
@@ -104,10 +102,10 @@ try:
                 pular_linha = True
         
         if linha.startswith("|F100|"):
-            cont_registros_f100 = cont_registros_f100 + 1
+            cont_registros_f100 += 1
         
         if linha.startswith("|F130|"):
-            cont_registros_f130 = cont_registros_f130 + 1
+            cont_registros_f130 += 1
             
         if linha.startswith("|F990|"):
             nova_linha = linha.replace(linha, f'|F990|{cont_registros_f+1}|\n')
