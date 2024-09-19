@@ -63,24 +63,6 @@ try:
             pular_linha = True
             nova_linha = linha.replace(linha, f'|0990|{cont_registros_0+1}|\n')
             novo_sped.append(nova_linha)
-                
-        if linha.startswith("|C100|0|"):
-            pular_linha = True
-            continue
-        
-        if linha.startswith("|C100|1|"):
-            pular_linha = False
-            
-        if linha.startswith("|C170|"):
-            conteudo_linha = linha.split("|")
-            if (conteudo_linha[25] == '01' or conteudo_linha[25] == '05') and (conteudo_linha[31] == '01' or conteudo_linha[31] == '05'):
-                is_c170 = True
-                conteudo_linha[27] = '0,65'
-                conteudo_linha[33] = '3' 
-                nova_linha = '|'.join(conteudo_linha)
-                novo_sped.append(nova_linha)
-                cont_registros_c += 1
-                cont_registros += 1
         
         if linha.startswith("|C990|"):
             cont_registros += 1
